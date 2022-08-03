@@ -1,17 +1,19 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { IMyUserResponse } from "../../model/IUser";
 import { fetchUsers, fetchMyUser } from "../../store/reducers/ActionCreators";
 import { userSlice } from "../../store/reducers/UseSlice";
 import { checkAuthorization } from "../../utils/auth";
 import { Main } from "../Main/Main";
 
-const SignIn = ({ props }: any) => {
-  const [error, setError] = useState<boolean>(true);
+const SignIn = (props: any) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const dispatch = useAppDispatch();
   return (
     <div>
+    <h1>Авторизоваться</h1>
       <input
         value={email}
         onChange={(e) => {
@@ -39,23 +41,73 @@ const SignIn = ({ props }: any) => {
   );
 };
 
-const SignUp = ({ props }: any) => {
+const SignUp = ( props: any) => {
+  const [email, setEmail] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const { setStateSign } = props;
+  const changeSingState = () => {
+    setStateSign('signin');
+  }
+  async function singUpResp(email: string, password: string, errorSet: (err: string) => void, OkSet: () => void) {
+    const response = await axios.post<IMyUserResponse>(
+      "http://localhost:3001/api/auth/singup",
+      {
+        email: email,
+        password: password,
+      }
+    ).then(() => {
+      OkSet();
+      alert('зарегистрирован')
+    }).catch((err) => {
+      errorSet(err);
+    });
+    
+  }
+
   return (
     <div>
-      <input type="text" />
-      <input type="text" />
-      <button>Загесистрироваться</button>
+      <h1>Загесистрироваться</h1>
+      <input
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value);
+        }}
+        type="text"
+      />
+      <span>test#@mial.ru</span>
+      <input
+        value={password}
+        onChange={(e) => {
+          setPassword(e.target.value);
+        }}
+        type="text"
+      />
+      <span>test</span>
+      <button
+        onClick={() => {
+          if (email && password) {
+            singUpResp(email, password, (error: string) => {setError(error)}, changeSingState);
+          }
+        }}
+      >
+        Загесистрироваться
+      </button>
+      {
+        error ? (<div>Error : {JSON.stringify(error)}</div>) : null
+      }
     </div>
   );
 };
 
 type ISign = "signin" | "signup";
 
-const Auth = ({ props }: any) => {
+const Auth = ( props : any) => {
   const [state, setState] = useState<ISign>("signin");
+  console.log('state', state)
   return (
     <div>
-      {state === "signin" ? <SignIn /> : <SignUp />}
+      {state === "signin" ? <SignIn /> : <SignUp setStateSign={setState} />}
       <div>
         <button
           onClick={() => {
@@ -87,7 +139,7 @@ export const Carcas = ({ props }: any) => {
     if (my.id) {
       setAuth(true);
     }
-  }, [my])
+  }, [my]);
 
   return (
     <div>{auth ? <Main /> : <Auth />}</div>
