@@ -1,0 +1,20 @@
+@import "../../variables.scss";
+$input-height: 40px;
+
+.input {
+    background-color: $gainsboro;
+    margin: 10px 5px;
+    padding: 5px $input-height / 2;
+    border: 2px solid $base-color;
+
+    height: $input-height;
+    border-radius: $input-height / 2;
+
+    font-size: 20px;
+    align-items: center;
+    color: $black;
+
+    &::placeholder {
+        color: $lightSlateGray;
+      }
+}
