@@ -2,4 +2,12 @@
     display: grid;
     height: 100%;
     width: 100%;
+    grid-template-areas: 
+                "left main";
+    grid-template-columns: 1fr 100%;
+}
+
+.main__main {
+    grid-area: main;
+    background-color: violet;
 }

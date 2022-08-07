@@ -1,0 +1,15 @@
+@import "../../variables.scss";
+$activate-width: 400px;
+$unactivate-width: 200px;
+$gainsboro: #DCDCDC;
+
+.leftBar {
+    grid-area: left;
+    background-color: antiquewhite;
+    width: $unactivate-width;
+    &_activate {
+        width: $activate-width;
+    }
+
+    transition: $transition-base;
+}
