@@ -2,19 +2,9 @@ import cn from "classnames";
 import { LeftBar } from "../LeftBar/LeftBar";
 import { Link } from "react-router-dom";
 import { Routes, Route } from "react-router-dom"
+import { rooms } from './data';
 
 import "./style.scss";
-const rooms = [
-  {
-    id: 1,
-  },
-  {
-    id: 2,
-  },
-  {
-    id: 3,
-  },
-];
 
 export const Main = ({ props }: any) => {
   return (
