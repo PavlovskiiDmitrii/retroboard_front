@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../hooks/redux";
+import { useAppSelector, useAppDispatch } from "../../hooks/redux";
 import { checkAuthorization } from "../../utils/auth";
+import { fetchUsersCheck } from "../../store/reducers/ActionCreators";
 import { Main } from "../Main/Main";
 import cn from "classnames";
 import "./style.scss";
@@ -8,14 +9,27 @@ import "./style.scss";
 import { Auth } from "../Auth/Auth";
 
 export const Carcas = ({ props }: any) => {
-  const { my } = useAppSelector((state) => state.myUserReduser);
+  const { my, isCheck } = useAppSelector((state) => state.myUserReduser);
   const [auth, setAuth] = useState<boolean>(checkAuthorization());
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (my.id) {
+    dispatch(fetchUsersCheck(localStorage.getItem("MyEmail") || '', localStorage.getItem("PasswordHash")|| '') );
+  }, []);
+
+  // useEffect(() => {
+  //   if (my.id) {
+  //     setAuth(true);
+  //   }
+  // }, [my]);
+
+    useEffect(() => {
+    if (isCheck) {
       setAuth(true);
+    } else {
+      setAuth(false);
     }
-  }, [my]);
+  }, [isCheck]);
 
   return <div className={cn("carcas")}>{auth ? <Main /> : <Auth />}</div>;
 };

@@ -12,4 +12,5 @@ export interface IMyUser extends IUser {
 
 export interface IMyUserResponse extends IMyUser {
     accessToken: string;
+    password: string;
 }

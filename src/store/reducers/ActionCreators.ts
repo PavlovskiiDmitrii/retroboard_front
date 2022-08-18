@@ -25,14 +25,13 @@ export const fetchUsers = () => async (dispatch: AppDispath) => {
   }
 };
 
-const paht = "http://localhost:3001/api/auth/singin";
+const pahtFetchMyUser = "http://localhost:3001/api/auth/singin";
 
 export const fetchMyUser =
-  ( email: string, password: string) =>
-  async (dispatch: AppDispath) => {
+  (email: string, password: string) => async (dispatch: AppDispath) => {
     try {
       dispatch(myUserSlice.actions.myUserFetching());
-      const { data } = await axios.post<IMyUserResponse>(paht, {
+      const { data } = await axios.post<IMyUserResponse>(pahtFetchMyUser, {
         email: email,
         password: password,
       });
@@ -43,8 +42,33 @@ export const fetchMyUser =
         email: data.email,
       };
       localStorage.setItem("Token", data.accessToken);
+      localStorage.setItem("PasswordHash", data.password);
+      localStorage.setItem("MyEmail", data.email);
       dispatch(myUserSlice.actions.myUserFetchingSuccess(myUser));
     } catch (e) {
       dispatch(userSlice.actions.userFetchingError("errar"));
+    }
+  };
+
+  
+const myUserCheck = "http://localhost:3001/api/check";
+const token = localStorage.getItem("Token") || '';
+const headers = {
+  "x-access-token": token
+}
+
+export const fetchUsersCheck =
+  (email: string, password: string) => async (dispatch: AppDispath) => {
+    try {
+      dispatch(myUserSlice.actions.myUserCheckFetching());
+      const { data } = await axios.post<IMyUserResponse>(myUserCheck, {
+        email: email,
+        password: password,
+      }, {
+        headers: headers
+      });
+      dispatch(myUserSlice.actions.myUserCheckSuccess());
+    } catch (e) {
+      dispatch(myUserSlice.actions.myUserCheckFold());
     }
   };

@@ -6,7 +6,8 @@ interface IMyUserState extends IIsLoading {
 }
 
 interface IIsLoading {
-    isLoading: boolean
+    isLoading: boolean,
+    isCheck: boolean,
 }
 
 interface IMy {
@@ -23,19 +24,31 @@ const initialState: IMyUserState  = {
         role: null,
         email: null
     },
-    isLoading: false
+    isLoading: false,
+    isCheck: false,
 }
 
 export const myUserSlice = createSlice({
     name: 'myIser',
     initialState,
     reducers: {
+        myUserCheckFetching(state) {
+            state.isCheck = false;
+        },
+        myUserCheckSuccess(state) {
+            state.isCheck = true;
+        },
+        myUserCheckFold(state) {
+            state.isCheck = false;
+        },
+        ////////////////
         myUserFetching(state) {
             state.isLoading = true;
         },
         myUserFetchingSuccess(state, action: PayloadAction<IMyUser>) {
             state.isLoading = false;
             state.my = action.payload;
+            state.isCheck = true;
         }
     }
 })
