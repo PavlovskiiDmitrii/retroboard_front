@@ -1,10 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import userReduser from './reducers/UseSlice';
 import myUserReduser from './reducers/MyUserSlice';
+import myGroupsReduser from './reducers/MyGroupSlice';
 
 const rootReducer = combineReducers({
-    userReduser,
-    myUserReduser
+    myUserReduser,
+    myGroupsReduser
 })
 
 export const setupStore = () => {

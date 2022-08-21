@@ -13,7 +13,7 @@ export const Main = ({ props }: any) => {
       <div className={cn("main__main")}>
         {
           rooms.map((room) => (
-            <div>
+            <div key={room.id}>
               <Link to={`/${room.id}`}><button>__{room.id}__</button></Link>
             </div>
           ))

@@ -1,16 +1,15 @@
-import { StringLiteral } from "typescript";
-
 export interface IUser {
-    id: number;
-    name: string;
-    email: string;
+    id: number | null;
+    name: string | null;
+    email: string | null;
 }
 
 export interface IMyUser extends IUser {
-    role : string;
+    role : string | null;
 }
 
 export interface IMyUserResponse extends IMyUser {
     accessToken: string;
     password: string;
+    my: IMyUser;
 }

@@ -2,19 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IMyUser } from '../../model/IUser';
 
 interface IMyUserState extends IIsLoading {
-    my: IMy;
+    my: IMyUser;
 }
 
 interface IIsLoading {
     isLoading: boolean,
     isCheck: boolean,
-}
-
-interface IMy {
-    id: number | null;
-    name: string | null;
-    role: string | null;
-    email: string | null;
 }
 
 const initialState: IMyUserState  = {
@@ -35,8 +28,9 @@ export const myUserSlice = createSlice({
         myUserCheckFetching(state) {
             state.isCheck = false;
         },
-        myUserCheckSuccess(state) {
+        myUserCheckSuccess(state, action: PayloadAction<IMyUser>) {
             state.isCheck = true;
+            state.my = action.payload;
         },
         myUserCheckFold(state) {
             state.isCheck = false;
@@ -49,6 +43,9 @@ export const myUserSlice = createSlice({
             state.isLoading = false;
             state.my = action.payload;
             state.isCheck = true;
+        },
+        myUserFetchingError(state, action: PayloadAction<string>) {
+            state.isLoading = false;
         }
     }
 })

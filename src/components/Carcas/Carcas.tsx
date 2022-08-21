@@ -9,19 +9,13 @@ import "./style.scss";
 import { Auth } from "../Auth/Auth";
 
 export const Carcas = ({ props }: any) => {
-  const { my, isCheck } = useAppSelector((state) => state.myUserReduser);
+  const { isCheck } = useAppSelector((state) => state.myUserReduser);
   const [auth, setAuth] = useState<boolean>(checkAuthorization());
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchUsersCheck(localStorage.getItem("MyEmail") || '', localStorage.getItem("PasswordHash")|| '') );
   }, []);
-
-  // useEffect(() => {
-  //   if (my.id) {
-  //     setAuth(true);
-  //   }
-  // }, [my]);
 
     useEffect(() => {
     if (isCheck) {
