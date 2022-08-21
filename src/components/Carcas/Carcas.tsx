@@ -15,6 +15,7 @@ export const Carcas = ({ props }: any) => {
 
   useEffect(() => {
     dispatch(fetchUsersCheck(localStorage.getItem("MyEmail") || '', localStorage.getItem("PasswordHash")|| '') );
+  // TODO https://stackoverflow.com/questions/55840294/how-to-fix-missing-dependency-warning-when-using-useeffect-react-hook
   }, []);
 
     useEffect(() => {
