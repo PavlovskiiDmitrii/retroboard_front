@@ -3,6 +3,7 @@ import { myGroupsSlice } from "./MyGroupSlice";
 import { myRoomSlice } from "./MyRoomSlice";
 import { IMyUser, IMyUserResponse } from "./../../model/IUser";
 import { IGroup } from "../../model/IGrous";
+import { IRoom } from "../../model/IRoom";
 import { AppDispath } from "./../store";
 import axios from "axios";
 
@@ -119,15 +120,40 @@ export const fetchMyRoom = (myId: number) => async (dispatch: AppDispath) => {
   };
   try {
     dispatch(myRoomSlice.actions.myRoomsFetching());
-    const { data } = await axios.get<IGroup[]>(
+    const { data } = await axios.get<IRoom[]>(
       `${getRoomsByClientIdApi}?id=${myId}`,
       {
         headers: headers,
       }
     );
-    const myRooms: IGroup[] = data;
+    const myRooms: IRoom[] = data;
     dispatch(myRoomSlice.actions.myRoomsFetchingSuccess(myRooms));
   } catch (e) {
-    dispatch(myGroupsSlice.actions.myGroupFetchingError("Error fetchMyGroup"));
+    //TODO
+    // dispatch(myRoomSlice.actions.myGroupFetchingError("Error fetchMyGroup"));
+  }
+};
+
+export const createRoom = (myId: number, title: string) => async (dispatch: AppDispath) => {
+  const createRoomApi = "http://localhost:3001/api/room";
+  const token = localStorage.getItem("Token") || "";
+  const headers = {
+    "x-access-token": token,
+  };
+  try {
+    const { data } = await axios.post<IRoom[]>(
+      `${createRoomApi}`,
+      {
+        title : title,
+        owner_id: myId
+      },
+      {
+        headers: headers,
+      }
+    );
+    const newRoom: IRoom = data[0];
+    dispatch(myRoomSlice.actions.addNewRoomSuccess(newRoom));
+  } catch (e) {
+    dispatch(myRoomSlice.actions.addNewRoomError());
   }
 };

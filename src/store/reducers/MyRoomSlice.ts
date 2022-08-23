@@ -25,6 +25,13 @@ export const myRoomSlice = createSlice({
       state.rooms = action.payload;
       state.isLoading = false;
     },
+    addNewRoomSuccess(state, action: PayloadAction<IRoom>) {
+      state.rooms = [...state.rooms, action.payload];
+      state.isLoading = false;
+    },
+    addNewRoomError(state) {
+      state.isLoading = false;
+    },
 //     // TODO
 //     myGroupFetchingError(state, action: PayloadAction<string>) {
 //         state.groups = [];
