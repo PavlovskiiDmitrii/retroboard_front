@@ -2,13 +2,17 @@ import cn from "classnames";
 import { useState, useEffect } from "react";
 import { IGroup } from "../../model/IGrous"
 import { useAppSelector, useAppDispatch } from "../../hooks/redux";
-import { fetchMyGroup } from "../../store/reducers/ActionCreators";
+import { fetchMyGroup, createGroup } from "../../store/reducers/ActionCreators";
+import { Input } from '../Input/Input'
 import "./style.scss";
+import "./formCreateGroud.scss";
 
 export const LeftBar = ({ props }: any) => {
   const { my } = useAppSelector((state) => state.myUserReduser);
   const { groups } = useAppSelector((state) => state.myGroupsReduser);
   const [activate, setActivate] = useState(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [formActivate, setFormActivate] = useState(false);
   const [myGroups, setMyGroups] = useState<IGroup[]>([]);
   const dispatch = useAppDispatch();
 
@@ -35,7 +39,28 @@ export const LeftBar = ({ props }: any) => {
       }
       <button onClick={() => {
         setActivate(!activate);
-      }}>'asdasd'</button>
+      }}>Открыть</button>
+      <button onClick={() => {
+        setFormActivate(true);
+      }}>Слздать группу</button>
+
+      <div className={cn("formCreateGroud", formActivate ? 'formCreateGroud__open' : '')}>
+        <div onClick={() => {
+          setFormActivate(false);
+        }}>
+          X
+        </div>
+        <Input placeholder={'Title group'} value={inputValue} cb={setInputValue}/>
+        <button onClick={() => {
+          if (my.id) {
+            dispatch(createGroup(my.id, inputValue)).then(() => {
+              setFormActivate(false);
+            });
+          } else {
+            alert('авторизуйтесь')
+          }
+        }}>Создать</button>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,12 @@
+.formCreateGroud {
+    width: 400px;
+    height: 400px;
+    background-color: aquamarine;
+    position: absolute;
+    display: none;
+
+    &__open {
+        display: flex;
+    }
+}
+

@@ -25,6 +25,13 @@ export const myGroupsSlice = createSlice({
       state.groups = action.payload;
       state.isLoading = false;
     },
+    addNewFroupSuccess(state, action: PayloadAction<IGroup>) {
+      state.groups = [...state.groups, action.payload];
+      state.isLoading = false;
+    },
+    addNewFroupError(state) {
+      state.isLoading = false;
+    },
     // TODO
     myGroupFetchingError(state, action: PayloadAction<string>) {
         state.groups = [];

@@ -1,5 +1,6 @@
 import { myUserSlice } from "./MyUserSlice";
 import { myGroupsSlice } from "./MyGroupSlice";
+import { myRoomSlice } from "./MyRoomSlice";
 import { IMyUser, IMyUserResponse } from "./../../model/IUser";
 import { IGroup } from "../../model/IGrous";
 import { AppDispath } from "./../store";
@@ -78,6 +79,54 @@ export const fetchMyGroup = (myId: number) => async (dispatch: AppDispath) => {
     );
     const myGroupsId: IGroup[] = data;
     dispatch(myGroupsSlice.actions.myGroupFetchingSuccess(myGroupsId));
+  } catch (e) {
+    dispatch(myGroupsSlice.actions.myGroupFetchingError("Error fetchMyGroup"));
+  }
+};
+
+export const createGroup = (myId: number, title: string) => async (dispatch: AppDispath) => {
+  const createGroupApi = "http://localhost:3001/api/group";
+  const token = localStorage.getItem("Token") || "";
+  const headers = {
+    "x-access-token": token,
+  };
+  try {
+    const { data } = await axios.post<IGroup[]>(
+      `${createGroupApi}`,
+      {
+        title : title,
+        owner_id: myId
+      },
+      {
+        headers: headers,
+      }
+    );
+    const newGroup: IGroup = data[0];
+    dispatch(myGroupsSlice.actions.addNewFroupSuccess(newGroup));
+  } catch (e) {
+    dispatch(myGroupsSlice.actions.addNewFroupError());
+  }
+};
+
+
+///ROOM///
+
+export const fetchMyRoom = (myId: number) => async (dispatch: AppDispath) => {
+  const getRoomsByClientIdApi = "http://localhost:3001/api/rooms";
+  const token = localStorage.getItem("Token") || "";
+  const headers = {
+    "x-access-token": token,
+  };
+  try {
+    dispatch(myRoomSlice.actions.myRoomsFetching());
+    const { data } = await axios.get<IGroup[]>(
+      `${getRoomsByClientIdApi}?id=${myId}`,
+      {
+        headers: headers,
+      }
+    );
+    const myRooms: IGroup[] = data;
+    dispatch(myRoomSlice.actions.myRoomsFetchingSuccess(myRooms));
   } catch (e) {
     dispatch(myGroupsSlice.actions.myGroupFetchingError("Error fetchMyGroup"));
   }
