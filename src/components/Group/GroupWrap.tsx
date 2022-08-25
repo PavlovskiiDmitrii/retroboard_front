@@ -3,8 +3,11 @@ import "./groupwrap.scss";
 
 export const GroupWrap = ({ children }: any) => {
   return (
-    <div className={cn("groupwrap")}> 
-        {children}
+    <div>
+      <div>
+        Группы
+      </div>
+      <div className={cn("groupwrap")}>{children}</div>
     </div>
   );
 };

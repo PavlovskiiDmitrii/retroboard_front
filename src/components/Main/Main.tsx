@@ -16,6 +16,7 @@ import { render } from "@testing-library/react";
 export const Main = ({ props }: any) => {
   const { my } = useAppSelector((state) => state.myUserReduser);
   const { rooms } = useAppSelector((state) => state.myRoomSlice);
+  const [myRoomsAdmin, setMyRoomsAdmin] = useState<IRoom[]>([]);
   const [myRooms, setMyRooms] = useState<IRoom[]>([]);
   const [formActivate, setFormActivate] = useState(false);
   const [inputValue, setInputValue] = useState<string>("");
@@ -29,7 +30,18 @@ export const Main = ({ props }: any) => {
 
   useEffect(() => {
     if (rooms.length) {
-      setMyRooms(rooms);
+      const adminRoom : IRoom[] = [];
+      const simpleRoom : IRoom[] = [];
+      rooms.forEach((room) => {
+        console.log(room.owner_id, my.id)
+        if(room.owner_id === my.id){
+          adminRoom.push(room);
+        } else {
+          simpleRoom.push(room);
+        }
+      })
+      setMyRoomsAdmin(adminRoom);
+      setMyRooms(simpleRoom);
     }
   }, [rooms]);
 
@@ -69,6 +81,11 @@ export const Main = ({ props }: any) => {
     <div className={cn("main__wrap")}>
       <LeftBar />
       <div className={cn("main__main")}>
+        <div>Админ</div>
+        {myRoomsAdmin.map((room) => (
+          <RoomButton key={room.id} id={room.id} title={room.title} type={'admin'}/>
+        ))}
+        <div>Мембер</div>
         {myRooms.map((room) => (
           <RoomButton key={room.id} id={room.id} title={room.title} />
         ))}
