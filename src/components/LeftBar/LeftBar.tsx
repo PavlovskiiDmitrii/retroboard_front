@@ -1,17 +1,20 @@
 import cn from "classnames";
 import { useState, useEffect } from "react";
-import { IGroup } from "../../model/IGrous"
+import { IGroup } from "../../model/IGrous";
 import { useAppSelector, useAppDispatch } from "../../hooks/redux";
 import { fetchMyGroup, createGroup } from "../../store/reducers/ActionCreators";
-import { Input } from '../Input/Input'
+import { Input } from "../Input/Input";
+import { Button } from "../Button/Button";
+import { PopUp } from "../PopUp/PopUp";
+import { Group } from "../Group/Group";
+import { GroupWrap } from "../Group/GroupWrap";
 import "./style.scss";
-import "./formCreateGroud.scss";
 
 export const LeftBar = ({ props }: any) => {
   const { my } = useAppSelector((state) => state.myUserReduser);
   const { groups } = useAppSelector((state) => state.myGroupsReduser);
   const [activate, setActivate] = useState(false);
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>("");
   const [formActivate, setFormActivate] = useState(false);
   const [myGroups, setMyGroups] = useState<IGroup[]>([]);
   const dispatch = useAppDispatch();
@@ -28,39 +31,63 @@ export const LeftBar = ({ props }: any) => {
     }
   }, [groups]);
 
+  const sendCreateGroup = () => {
+    if (my.id && inputValue !== "") {
+      dispatch(createGroup(my.id, inputValue)).then(() => {
+        setFormActivate(false);
+      });
+    } else {
+      alert("авторизуйтесь");
+    }
+  };
+
+  const PopUpChildren = () => {
+    return (
+      <div>
+        <Button
+          onClick={() => {
+            setFormActivate(false);
+          }}
+          text={"X"}
+        />
+        <Input
+          placeholder={"Title group"}
+          value={inputValue}
+          cb={setInputValue}
+        />
+        <Button
+          onClick={() => {
+            sendCreateGroup();
+          }}
+          text={"Создать"}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className={cn("leftBar", activate && "leftBar_activate")}>
-      {
-        myGroups.map((group) => (
-          <div key={group.id}>
-            {group.title}
-          </div>
-        ))
-      }
-      <button onClick={() => {
-        setActivate(!activate);
-      }}>Открыть</button>
-      <button onClick={() => {
-        setFormActivate(true);
-      }}>Слздать группу</button>
+      <GroupWrap>
+        {myGroups.map((group) => (
+          <Group key={group.id} title={group.title} />
+        ))}
+      </GroupWrap>
 
-      <div className={cn("formCreateGroud", formActivate ? 'formCreateGroud__open' : '')}>
-        <div onClick={() => {
-          setFormActivate(false);
-        }}>
-          X
-        </div>
-        <Input placeholder={'Title group'} value={inputValue} cb={setInputValue}/>
-        <button onClick={() => {
-          if (my.id) {
-            dispatch(createGroup(my.id, inputValue)).then(() => {
-              setFormActivate(false);
-            });
-          } else {
-            alert('авторизуйтесь')
-          }
-        }}>Создать</button>
-      </div>
+      <Button
+        onClick={() => {
+          setActivate(!activate);
+        }}
+        text={"Открыть"}
+      />
+      <Button
+        onClick={() => {
+          setFormActivate(!formActivate);
+        }}
+        text={"Создать группу"}
+      />
+      <PopUp activatePopUp={formActivate}>
+        <PopUpChildren />
+      </PopUp>
     </div>
   );
 };

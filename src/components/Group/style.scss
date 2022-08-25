@@ -1,0 +1,9 @@
+$margin: 5px;
+
+.group {
+    width: calc(100%  - #{$margin * 2});
+    margin: $margin;
+    padding: 5px;
+    border: 1px solid red;
+    border-radius: 4px;
+}

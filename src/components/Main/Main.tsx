@@ -1,14 +1,17 @@
 import cn from "classnames";
 import { useState, useEffect } from "react";
 import { LeftBar } from "../LeftBar/LeftBar";
-import { Link } from "react-router-dom";
 import { IRoom } from "../../model/IRoom";
 import { Routes, Route } from "react-router-dom";
 import { Input } from "../Input/Input";
+import { PopUp } from "../PopUp/PopUp";
+import { Button } from "../Button/Button";
+import { RoomButton } from "../RoomButton/RoomButton";
 import { useAppSelector, useAppDispatch } from "../../hooks/redux";
 import { fetchMyRoom, createRoom } from "../../store/reducers/ActionCreators";
 
 import "./style.scss";
+import { render } from "@testing-library/react";
 
 export const Main = ({ props }: any) => {
   const { my } = useAppSelector((state) => state.myUserReduser);
@@ -30,56 +33,54 @@ export const Main = ({ props }: any) => {
     }
   }, [rooms]);
 
+  const PopUpChildren = () => {
+    return(
+      <div>
+        <div
+          onClick={() => {
+            setFormActivate(false);
+          }}
+        >
+          X
+        </div>
+        <Input
+          placeholder={"Title romm"}
+          value={inputValue}
+          cb={setInputValue}
+        />
+        <button
+          onClick={() => {
+            if (my.id) {
+              dispatch(createRoom(my.id, inputValue)).then(() => {
+                setFormActivate(false);
+              });
+            } else {
+              alert("авторизуйтесь");
+            }
+          }}
+        >
+          Создать
+        </button>
+      </div>
+    );
+  };
+
   return (
     <div className={cn("main__wrap")}>
       <LeftBar />
       <div className={cn("main__main")}>
         {myRooms.map((room) => (
-          <div key={room.id}>
-            <Link to={`/${room.id}`}>
-              <button>__{room.title}__</button>
-            </Link>
-          </div>
+          <RoomButton key={room.id} id={room.id} title={room.title} />
         ))}
-        <button
+        <Button
           onClick={() => {
-            setFormActivate(true);
+            setFormActivate(!formActivate);
           }}
-        >
-          Слздать комнату
-        </button>
-        <div
-          className={cn(
-            "formCreateGroud",
-            formActivate ? "formCreateGroud__open" : ""
-          )}
-        >
-          <div
-            onClick={() => {
-              setFormActivate(false);
-            }}
-          >
-            X
-          </div>
-          <Input
-            placeholder={"Title romm"}
-            value={inputValue}
-            cb={setInputValue}
-          />
-          <button
-            onClick={() => {
-              if (my.id) {
-                dispatch(createRoom(my.id, inputValue)).then(() => {
-                  setFormActivate(false);
-                });
-              } else {
-                alert("авторизуйтесь");
-              }
-            }}
-          >
-            Создать
-          </button>
-        </div>
+          text={"Создать комнату"}
+        />
+        <PopUp activatePopUp={formActivate}>
+          <PopUpChildren />
+        </PopUp>
 
         <Routes>
           {myRooms.map((room) => (

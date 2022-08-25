@@ -1,11 +1,11 @@
-.formCreateGroud {
+.popup {
     width: 400px;
     height: 400px;
     background-color: aquamarine;
     position: absolute;
     display: none;
 
-    &__open {
+    &_open {
         display: flex;
     }
 }

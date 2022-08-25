@@ -17,13 +17,3 @@ export const Input = ({ value, placeholder, cb, type = "test" }: any) => {
     </div>
   );
 };
-
-{
-  /* <input
-value={email}
-onChange={(e) => {
-  setEmail(e.target.value);
-}}
-type="text"
-/> */
-}
