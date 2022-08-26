@@ -3,25 +3,31 @@ import cn from "classnames";
 import "./style.scss";
 import { Link } from "react-router-dom";
 import { PopUp } from "../PopUp/PopUp";
-
-// const AdminPanel = ({} : any) => {
-//   return (
-//     <div>
-//       <button onClick={() => {
-//             setFormActivate(!formActivate);
-//           }}>
-//         Добавить клиента
-//       </button>
-//     </div>
-//   )
-// }
-
-const PopUpChildren = () => {
-  return <div>123</div>;
-};
+import { Button } from "../Button/Button";
+import { Input } from "../Input/Input";
 
 export const RoomButton = ({ id, title, type }: any) => {
   const [formActivate, setFormActivate] = useState(false);
+  const [inputValue, setInputValue] = useState<string>("");
+
+  const PopUpChildren = () => {
+    return (
+      <div>
+        <Button onClick={() => { setFormActivate(false); }} text={"X"} />
+        <Input
+          placeholder={"Client email"}
+          value={inputValue}
+          cb={setInputValue}
+        />
+        <Button
+          onClick={() => {
+            
+          }}
+          text={"Добавить"}
+        />
+      </div>
+    );
+  };
 
   return (
     <div className={cn("roomButton")}>

@@ -11,7 +11,6 @@ import { useAppSelector, useAppDispatch } from "../../hooks/redux";
 import { fetchMyRoom, createRoom } from "../../store/reducers/ActionCreators";
 
 import "./style.scss";
-import { render } from "@testing-library/react";
 
 export const Main = ({ props }: any) => {
   const { my } = useAppSelector((state) => state.myUserReduser);
@@ -30,23 +29,22 @@ export const Main = ({ props }: any) => {
 
   useEffect(() => {
     if (rooms.length) {
-      const adminRoom : IRoom[] = [];
-      const simpleRoom : IRoom[] = [];
+      const adminRoom: IRoom[] = [];
+      const simpleRoom: IRoom[] = [];
       rooms.forEach((room) => {
-        console.log(room.owner_id, my.id)
-        if(room.owner_id === my.id){
+        if (room.owner_id === my.id) {
           adminRoom.push(room);
         } else {
           simpleRoom.push(room);
         }
-      })
+      });
       setMyRoomsAdmin(adminRoom);
       setMyRooms(simpleRoom);
     }
   }, [rooms]);
 
   const PopUpChildren = () => {
-    return(
+    return (
       <div>
         <div
           onClick={() => {
@@ -83,7 +81,12 @@ export const Main = ({ props }: any) => {
       <div className={cn("main__main")}>
         <div>Админ</div>
         {myRoomsAdmin.map((room) => (
-          <RoomButton key={room.id} id={room.id} title={room.title} type={'admin'}/>
+          <RoomButton
+            key={room.id}
+            id={room.id}
+            title={room.title}
+            type={"admin"}
+          />
         ))}
         <div>Мембер</div>
         {myRooms.map((room) => (
@@ -100,8 +103,8 @@ export const Main = ({ props }: any) => {
         </PopUp>
 
         <Routes>
-          {myRooms.map((room) => (
-            <Route path={`/${room.id}`} element={<div>{room.title}</div>} />
+          {myRooms.concat(myRoomsAdmin).map((room) => (
+            <Route key={room.id} path={`/${room.id}`} element={<div>{room.title}</div>} />
           ))}
         </Routes>
       </div>
