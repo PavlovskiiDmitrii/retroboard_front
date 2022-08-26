@@ -1,7 +1,7 @@
 import cn from "classnames";
 import "./style.scss";
 
-export const Input = ({ value, placeholder, cb, type = "test" }: any) => {
+export const Input = ({ value, placeholder, cb, type = "text" }: any) => {
   return (
     <div>
       <input

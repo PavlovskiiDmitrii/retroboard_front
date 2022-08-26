@@ -6,7 +6,7 @@ import { Group } from "../Group/Group";
 import { Input } from "../Input/Input";
 import { PopUp } from "../PopUp/PopUp";
 import { Button } from "../Button/Button";
-import { IGroup } from "../../model/IGrous";
+import { IGroup } from "../../model/IGroup";
 
 import "./groupwrap.scss";
 
@@ -39,31 +39,16 @@ export const GroupWrap = ({ myId }: any) => {
     }
   };
 
-  const PopUpChildren = () => {
-    return (
-      <div>
-        <Button onClick={() => { setFormActivate(false); }} text={"X"} />
-        <Input
-          placeholder={"Title group"}
-          value={inputValue}
-          cb={setInputValue}
-        />
-        <Button
-          onClick={() => {
-            sendCreateGroup();
-          }}
-          text={"Создать"}
-        />
-      </div>
-    );
-  };
-
   return (
     <div>
       <div>Группы</div>
       <div className={cn("groupwrap")}>
         {myGroups.map((group) => (
-          <Group key={group.id} title={group.title} />
+          <Group
+            key={group.id}
+            title={group.title}
+            length={group.clients.length}
+          />
         ))}
         <Button
           onClick={() => {
@@ -72,7 +57,26 @@ export const GroupWrap = ({ myId }: any) => {
           text={"Создать группу"}
         />
         <PopUp activatePopUp={formActivate}>
-          <PopUpChildren />
+          <div>
+            <Button
+              onClick={() => {
+                setFormActivate(false);
+              }}
+              text={"X"}
+            />
+            <Input
+              placeholder={"Title group"}
+              value={inputValue}
+              setInputValue={setInputValue}
+              cb={setInputValue}
+            />
+            <Button
+              onClick={() => {
+                sendCreateGroup();
+              }}
+              text={"Создать"}
+            />
+          </div>
         </PopUp>
       </div>
     </div>

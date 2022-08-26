@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IGroup } from "../../model/IGrous";
+import { IGroup } from "../../model/IGroup";
 
 interface IMyGroupState extends IIsLoading {
   groups: IGroup[];

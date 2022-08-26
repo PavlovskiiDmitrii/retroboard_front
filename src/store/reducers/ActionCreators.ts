@@ -2,7 +2,7 @@ import { myUserSlice } from "./MyUserSlice";
 import { myGroupsSlice } from "./MyGroupSlice";
 import { myRoomSlice } from "./MyRoomSlice";
 import { IMyUser, IMyUserResponse } from "./../../model/IUser";
-import { IGroup } from "../../model/IGrous";
+import { IGroup } from "../../model/IGroup";
 import { IRoom } from "../../model/IRoom";
 import { AppDispath } from "./../store";
 import axios from "axios";
@@ -92,7 +92,7 @@ export const createGroup = (myId: number, title: string) => async (dispatch: App
     "x-access-token": token,
   };
   try {
-    const { data } = await axios.post<IGroup[]>(
+    const { data } = await axios.post<IGroup>(
       `${createGroupApi}`,
       {
         title : title,
@@ -102,8 +102,8 @@ export const createGroup = (myId: number, title: string) => async (dispatch: App
         headers: headers,
       }
     );
-    const newGroup: IGroup = data[0];
-    dispatch(myGroupsSlice.actions.addNewFroupSuccess(newGroup));
+    console.log()
+    dispatch(myGroupsSlice.actions.addNewFroupSuccess(data));
   } catch (e) {
     dispatch(myGroupsSlice.actions.addNewFroupError());
   }

@@ -1,10 +1,10 @@
 import cn from "classnames";
 import "./style.scss";
 
-export const Group = ({ title }: any) => {
+export const Group = ({ title, length }: any) => {
   return (
     <div className={cn("group")}> 
-        {title}
+        {title} _ +{length}
     </div>
   );
 };
