@@ -6,4 +6,9 @@ $margin: 5px;
     padding: 5px;
     border: 1px solid red;
     border-radius: 4px;
+    transition: 0.2s;
+
+    &_open {
+        height: max-content;
+    }
 }

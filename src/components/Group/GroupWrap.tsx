@@ -46,8 +46,10 @@ export const GroupWrap = ({ myId }: any) => {
         {myGroups.map((group) => (
           <Group
             key={group.id}
+            id={group.id}
             title={group.title}
-            length={group.clients.length}
+            owner_id={group.owner_id}
+            clients={group.clients}
           />
         ))}
         <Button

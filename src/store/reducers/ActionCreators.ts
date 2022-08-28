@@ -3,6 +3,7 @@ import { myGroupsSlice } from "./MyGroupSlice";
 import { myRoomSlice } from "./MyRoomSlice";
 import { IMyUser, IMyUserResponse } from "./../../model/IUser";
 import { IGroup } from "../../model/IGroup";
+import { IUser } from "../../model/IUser";
 import { IRoom } from "../../model/IRoom";
 import { AppDispath } from "./../store";
 import axios from "axios";
@@ -85,6 +86,53 @@ export const fetchMyGroup = (myId: number) => async (dispatch: AppDispath) => {
   }
 };
 
+export const fetchAddClientToGroup = (group_id : number, email: string) => async (dispatch: AppDispath) => {
+  const getGroupsByClientIdApi = "http://localhost:3001/api/createconnectionfroupwithclient";
+  const token = localStorage.getItem("Token") || "";
+  const headers = {
+    "x-access-token": token,
+  };
+  try {
+    dispatch(myGroupsSlice.actions.fetchAddClientToGroup());
+    const { data } = await axios.post<IUser>(
+      `${getGroupsByClientIdApi}`,
+      {
+        "group_id" : group_id,
+        "email": email
+      },
+      {
+        headers: headers,
+      }
+    );
+    const addingUser: IUser = data;
+    dispatch(myGroupsSlice.actions.addClientToGroupSuccess({addingUser: addingUser, group_id: group_id}));
+  } catch (e) {
+    alert('error fetchAddClientToGroup')
+    // dispatch(myGroupsSlice.actions.myGroupFetchingError("Error fetchMyGroup"));
+  }
+};
+
+export const fetchRemoveClientToGroup = (group_id : number, user_id: number) => async (dispatch: AppDispath) => {
+  const getGroupsByClientIdApi = "http://localhost:3001/api/deleteClientFromGroup";
+  const token = localStorage.getItem("Token") || "";
+  const headers = {
+    "x-access-token": token,
+  };
+  try {
+    dispatch(myGroupsSlice.actions.fetchAddClientToGroup());
+    const _ = await axios.delete<any>(
+      `${getGroupsByClientIdApi}?client_id=${user_id}&tgroup_id=${group_id}`,
+      {
+        headers: headers,
+      }
+    );
+    dispatch(myGroupsSlice.actions.removeClientToGroupSuccess({user_id, group_id}));
+  } catch (e) {
+    alert('error fetchRemoveClientToGroup')
+    // dispatch(myGroupsSlice.actions.myGroupFetchingError("Error fetchMyGroup"));
+  }
+};
+
 export const createGroup = (myId: number, title: string) => async (dispatch: AppDispath) => {
   const createGroupApi = "http://localhost:3001/api/group";
   const token = localStorage.getItem("Token") || "";
@@ -102,8 +150,7 @@ export const createGroup = (myId: number, title: string) => async (dispatch: App
         headers: headers,
       }
     );
-    console.log()
-    dispatch(myGroupsSlice.actions.addNewFroupSuccess(data));
+    dispatch(myGroupsSlice.actions.addNewGroupSuccess(data));
   } catch (e) {
     dispatch(myGroupsSlice.actions.addNewFroupError());
   }

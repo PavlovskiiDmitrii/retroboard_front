@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IGroup } from "../../model/IGroup";
+import { IUser } from "../../model/IUser";
 
 interface IMyGroupState extends IIsLoading {
   groups: IGroup[];
@@ -25,8 +26,39 @@ export const myGroupsSlice = createSlice({
       state.groups = action.payload;
       state.isLoading = false;
     },
-    addNewFroupSuccess(state, action: PayloadAction<IGroup>) {
+    addNewGroupSuccess(state, action: PayloadAction<IGroup>) {
       state.groups = [...state.groups, action.payload];
+      state.isLoading = false;
+    },
+
+    fetchAddClientToGroup(state) {
+      state.isLoading = true;
+    },
+    addClientToGroupSuccess(state, action: PayloadAction<{addingUser : IUser, group_id: number}>) {
+      state.groups = state.groups.map((group) => {
+        if (group.id === action.payload.group_id) {
+          return {...group, clients : [...group.clients, action.payload.addingUser]};
+        } else {
+          return group;
+        }
+      })
+      state.isLoading = false;
+    },
+    fetchRemoveClientToGroup(state) {
+      state.isLoading = true;
+    },
+    removeClientToGroupSuccess(state, action: PayloadAction<{user_id : number, group_id: number}>) {
+      state.groups = state.groups.map((group) => {
+        if (group.id === action.payload.group_id) {
+          return {...group, clients : group.clients.filter((client) => {
+            if (client.id !== action.payload.user_id) {
+              return client;
+            }
+          })};
+        } else {
+          return group;
+        }
+      })
       state.isLoading = false;
     },
     addNewFroupError(state) {
